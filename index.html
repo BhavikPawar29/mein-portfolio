@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+  (function(){
+    emailjs.init("fqeKCPJDQP6nhUpuy");
+  })();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bhavik D. Pawar — Portfolio</title>
@@ -329,6 +335,67 @@
     nav ul { gap: 1rem; }
     nav a { font-size: 0.55rem; }
   }
+
+  @media (max-width: 768px) {
+  body {
+    cursor: default;
+  }
+
+  section {
+    padding: 90px 1rem 60px;
+  }
+
+  nav {
+    padding: 0.8rem 1rem;
+  }
+
+  nav ul {
+    gap: 0.6rem;
+  }
+
+  nav a {
+    font-size: 0.5rem;
+  }
+
+  #hero .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hero-name {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+
+  .hero-role {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+  }
+
+  .hero-statement {
+    font-size: 0.9rem;
+  }
+
+  .avatar-frame {
+    width: 240px;
+    height: 280px;
+  }
+
+  .section-title {
+    font-size: 2.2rem;
+  }
+
+  .panel-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
 </style>
 </head>
 <body>
@@ -727,17 +794,34 @@
   }, { threshold: 0.4 });
   sections.forEach(s => navObs.observe(s));
 
-  document.getElementById('sendBtn').addEventListener('click', function(e) {
-    e.preventDefault();
-    this.textContent = 'SIGNAL SENT ✓';
-    this.style.cssText += 'background:var(--neon-green);color:var(--black);border-color:var(--neon-green);';
-    setTimeout(() => {
-      this.textContent = 'SEND THE SIGNAL →';
-      this.style.background = '';
-      this.style.color = '';
-      this.style.borderColor = '';
-    }, 3000);
+ document.getElementById('sendBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+
+  const btn = this;
+
+  const name = document.querySelector('input[type="text"]').value;
+  const email = document.querySelector('input[type="email"]').value;
+  const message = document.querySelector('textarea').value;
+
+  if (!name || !email || !message) {
+    btn.textContent = "FILL THE FIELDS";
+    return;
+  }
+
+  btn.textContent = "TRANSMITTING...";
+
+  emailjs.send("service_5ca8hf5", "template_op2qcqr", {
+    from_name: name,
+    from_email: email,
+    message: message
+  })
+  .then(() => {
+    btn.textContent = "SIGNAL SENT ✓";
+  })
+  .catch(() => {
+    btn.textContent = "FAILED — RETRY";
   });
+});
 </script>
 </body>
 </html>
